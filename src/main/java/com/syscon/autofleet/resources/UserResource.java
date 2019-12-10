@@ -1,6 +1,7 @@
 package com.syscon.autofleet.resources;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,13 +29,22 @@ public class UserResource {
 	
 	@GetMapping("/user/{id}")
 	public ResponseData getUser(@PathVariable(value="id") Integer id){
-		return new ResponseData("success", "Usuário recuperado", userRepository.findById(id));
+		try {
+			User user = userRepository.findById(id).get();
+			return new ResponseData("success", "Usuário encontrado", user);
+		} catch (Exception e) {
+			return new ResponseData("error", "Usuário não encontrado");	
+		}
 	}
 	
 	@PostMapping("/user")
 	public ResponseData storeUser(@RequestBody User user){
 		if (userRepository.findByEmail(user.getEmail()) == null) {
-			return new ResponseData("success", "Usuário criado", userRepository.save(user));
+			if (userRepository.findByCpf(user.getCpf()) == null) {
+				return new ResponseData("success", "Usuário criado", userRepository.save(user));
+			} else {
+				return new ResponseData("error", "Já existe um usuário com este CPF");
+			}
 		} else {
 			return new ResponseData("error", "Já existe um usuário com este e-mail");
 		}
@@ -59,6 +69,21 @@ public class UserResource {
 			return new ResponseData("success", "Usuário removido");
 		} else {
 		    return new ResponseData("error", "Usuário não encontrado");
+		}
+	}
+	
+	@PostMapping("/user/login")
+	public ResponseData loginUser(@RequestBody User user){
+		try {
+			User dbUser = userRepository.findByEmail(user.getEmail());
+			if (dbUser.getPassword().equals(user.getPassword())) {
+				dbUser.setToken(UUID.randomUUID().toString());
+				return new ResponseData("success", "Usuário logado", userRepository.save(dbUser));
+			} else {
+				return new ResponseData("error", "Senha incorreta");
+			}
+		} catch (Exception e) {
+			return new ResponseData("error", "Usuário não encontrado");	
 		}
 	}
 }

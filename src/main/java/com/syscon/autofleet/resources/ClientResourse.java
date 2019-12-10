@@ -28,7 +28,12 @@ public class ClientResourse {
 	
 	@GetMapping("/client/{id}")
 	public Object getClient(@PathVariable(value="id") Integer id){
-		return clientRepository.findById(id);
+		try {
+			Client client = clientRepository.findById(id).get();
+			return new ResponseData("success", "Cliente encontrado", client);
+		} catch (Exception e) {
+			return new ResponseData("success", "Cliente não encontrado");	
+		}
 	}
 	
 	@PostMapping("/client")

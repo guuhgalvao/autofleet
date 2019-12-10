@@ -31,8 +31,11 @@ public class User extends BaseEntity implements Serializable{
 	@Column(nullable = false)
 	private String password;
 	
+	@Column(nullable = true)
+	private String token;
+	
 	@Column(nullable = false, length = 50)
-	private String role;
+	private String type;
 	
 	@Column(nullable = true)
 	private Integer client_id;
@@ -64,8 +67,12 @@ public class User extends BaseEntity implements Serializable{
 		return password;
 	}
 	
-	public String getRole() {
-		return role;
+	public String getToken() {
+		return token;
+	}
+	
+	public String getType() {
+		return type;
 	}
 	
 	public Integer getClient_id() {
@@ -101,8 +108,12 @@ public class User extends BaseEntity implements Serializable{
 		this.password = password;
 	}
 	
-	public void setRole(String role) {
-		this.role = role;
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	public void setClient_id(Integer client_id) {
