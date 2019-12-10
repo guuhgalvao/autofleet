@@ -3,6 +3,7 @@ package com.syscon.autofleet.resources;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import com.syscon.autofleet.models.ResponseData;
 import com.syscon.autofleet.models.Vehicle;
 import com.syscon.autofleet.repository.VehicleRepository;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path="/api")
 public class VehicleResource {
